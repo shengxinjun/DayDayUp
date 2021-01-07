@@ -23,7 +23,7 @@ public class ImportController {
  
     public  void doImport() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/mysql/US_Accidents_June20.csv"));// 换成你的文件名
+				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
 		
         Connection conn = null;
         Statement stmt = null;
@@ -43,24 +43,26 @@ public class ImportController {
             String line = null;
 			int count = 0;
 			long startTime = System.currentTimeMillis();
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null&&count<=1000000) {
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
-				String sql = "insert into us_accident set id ='"+item[0]+"',source='"+item[1]+"',start_time='"+item[4]+"',end_time='"+item[5]+"',start_lat='"+item[6]+"',start_lng='"+item[7]+"',description='"+item[11]+"',street='"+item[13]+"',city='"+item[15]+"',country='"+item[16]+"',state='"+item[17]+"',airport_code='"+item[21]+"',weather='"+item[22]+"',temperature='"+item[23]+"',wind='"+item[24]+"'";
+				String sql = "insert into us_accident set id ='"+item[0]+"',source='"+item[1]+"',start_time='"+item[4]+"',end_time='"+item[5]+"',start_lat='"+item[6]+"',start_lng='"+item[7]+"',street='"+item[13]+"',city='"+item[15]+"',country='"+item[16]+"',state='"+item[17]+"',airport_code='"+item[21]+"',weather='"+item[22]+"',temperature='"+item[23]+"',wind='"+item[24]+"'";
 
 				stmt.execute(sql);
-				if(count==548576){
+				if(count==500000){
 					long endTime = System.currentTimeMillis();
-					String sql1="insert into logger set message='插入548576条数据用时：" + (endTime - startTime)+" ms'";
+					String sql1="insert into logger set message='插入500000条数据用时：" + (endTime - startTime)+" ms'";
 		            stmt.execute(sql1);
 					
 				}
+				if (++count % 10000 == 0)
+					System.out.println("正在插入第" + count + "条数据！");
 				
 			}
 			
 
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='插入1048576条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='插入1000000条数据用时：" + (endTime - startTime)+" ms'";
             stmt.execute(sql1);
             rs.close();
             stmt.close();

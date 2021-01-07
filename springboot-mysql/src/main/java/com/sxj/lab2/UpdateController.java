@@ -22,7 +22,7 @@ public class UpdateController {
  
     public void doUpdate() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/mysql/US_Accidents_June20.csv"));// 换成你的文件名
+				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
 		
         Connection conn = null;
         Statement stmt = null;
@@ -42,24 +42,25 @@ public class UpdateController {
             String line = null;
 			int count = 0;
 			long startTime = System.currentTimeMillis();
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null&&count<=1000000) {
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
 				String sql = "update us_accident set source='test' where id = '"+item[0]+"'" ;
 
 				stmt.execute(sql);
-				if(count==548576){
+				if(count==500000){
 					long endTime = System.currentTimeMillis();
-					String sql1="insert into logger set message='更新548576条数据用时：" + (endTime - startTime)+" ms'";
+					String sql1="insert into logger set message='更新500000条数据用时：" + (endTime - startTime)+" ms'";
 		            stmt.execute(sql1);
 		        }
 				if (++count % 10000 == 0)
-					System.out.println("正在执行第" + count + "条数据！");
+					System.out.println("正在更新第" + count + "条数据！");
 			}
 			
 
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='更新1048576条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='更新1000000条数据用时：" + (endTime - startTime)+" ms'";
+			stmt.execute(sql1);
             rs.close();
             stmt.close();
             conn.close();

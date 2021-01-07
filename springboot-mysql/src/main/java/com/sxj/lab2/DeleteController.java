@@ -22,7 +22,7 @@ public class DeleteController {
  
     public void doDelete() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/mysql/US_Accidents_June20.csv"));// 换成你的文件名
+				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
 		
         Connection conn = null;
         Statement stmt = null;
@@ -42,15 +42,15 @@ public class DeleteController {
             String line = null;
 			int count = 0;
 			long startTime = System.currentTimeMillis();
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null&&count<=1000000) {
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
 				String sql = "delete from  us_accident where id ='"+item[0]+"'";
 
 				stmt.execute(sql);
-				if(count==548576){
+				if(count==500000){
 					long endTime = System.currentTimeMillis();
-					String sql1="insert into logger set message='删除548576条数据用时：" + (endTime - startTime)+" ms'";
+					String sql1="insert into logger set message='删除500000条数据用时：" + (endTime - startTime)+" ms'";
 		            stmt.execute(sql1);
 		        }
 				if (++count % 10000 == 0)
@@ -59,7 +59,8 @@ public class DeleteController {
 			
 
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='删除1048576条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='删除1000000条数据用时：" + (endTime - startTime)+" ms'";
+			stmt.execute(sql1);
             rs.close();
             stmt.close();
             conn.close();

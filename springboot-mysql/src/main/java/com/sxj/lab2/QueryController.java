@@ -22,7 +22,7 @@ public class QueryController {
  
     public void doQuery() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/mysql/US_Accidents_June20.csv"));// 换成你的文件名
+				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
 		
         Connection conn = null;
         Statement stmt = null;
@@ -42,22 +42,24 @@ public class QueryController {
             String line = null;
 			int count = 0;
 			long startTime = System.currentTimeMillis();
-			while ((line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null&&count<=1000000) {
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
 				String sql = "select * from us_accident where  id ='"+item[0]+"'";
 
 				rs = stmt.executeQuery(sql);
-				if(count==548576){
+				if(count==500000){
 					long endTime = System.currentTimeMillis();
-					String sql1="insert into logger set message='查找548576条数据用时：" + (endTime - startTime)+" ms'";
+					String sql1="insert into logger set message='查找500000条数据用时：" + (endTime - startTime)+" ms'";
 		            stmt.execute(sql1);
 		        }
+				if (++count % 10000 == 0)
+					System.out.println("正在查询第" + count + "条数据！");
 			}
 			
 
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='查找1048576条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='查找1000000条数据用时：" + (endTime - startTime)+" ms'";
             stmt.execute(sql1);
             rs.close();
             stmt.close();

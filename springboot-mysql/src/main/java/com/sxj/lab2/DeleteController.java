@@ -8,22 +8,29 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import com.sxj.util.DateUtil;
+
 public class DeleteController {
 	// MySQL 8.0 以下版本 - JDBC 驱动名及数据库 URL
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-    static final String DB_URL = "jdbc:mysql://shengxinjun.top:3306/hhu";
- 
-    // 数据库的用户名与密码，需要根据自己的设置
-    static final String USER = "sxj";
-    static final String PASS = "sxj";
+    final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
+    final String DB_URL = "jdbc:mysql://121.196.54.227:3306/hhu?characterEncoding=utf-8";
+
+
+   // 数据库的用户名与密码，需要根据自己的设置
+    final String USER = "spp";
+    final String PASS = "`Ho,.hai2020Sci";
  
     public void doDelete() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
-		
+				new FileReader("/usr/local/sxj/US_Accidents_June20.csv"));// 换成你的文件名
+
+		String startTimeString="";
+		String endTimeString="";
         Connection conn = null;
         Statement stmt = null;
         try{
@@ -41,25 +48,32 @@ public class DeleteController {
             
             String line = null;
 			int count = 0;
-			long startTime = System.currentTimeMillis();
+			List<String> list = new ArrayList<String>();
 			while ((line = reader.readLine()) != null&&count<=1000000) {
+				count++;
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
-				String sql = "delete from  us_accident where id ='"+item[0]+"'";
-
+				list.add(item[0]);
+			}
+			startTimeString=DateUtil.currentDateTime();
+			count = 0;
+			long startTime = System.currentTimeMillis();
+			for(String str:list) {
+				String sql = "delete from  us_accident where id ='"+str+"'";
 				stmt.execute(sql);
+				if (++count % 10000 == 0)
+					System.out.println("正在执行第" + count + "条数据！");
 				if(count==500000){
 					long endTime = System.currentTimeMillis();
 					String sql1="insert into logger set message='删除500000条数据用时：" + (endTime - startTime)+" ms'";
 		            stmt.execute(sql1);
 		        }
-				if (++count % 10000 == 0)
-					System.out.println("正在执行第" + count + "条数据！");
 			}
 			
 
+			endTimeString=DateUtil.currentDateTime();
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='删除1000000条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='删除1000000条数据用时：" + (endTime - startTime)+" ms,开始时间："+startTimeString+",结束时间："+endTimeString+"'";
 			stmt.execute(sql1);
             rs.close();
             stmt.close();

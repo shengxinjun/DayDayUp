@@ -1,4 +1,4 @@
-package xyz.dassiorleando.springbootorientdb;
+/*package xyz.dassiorleando.springbootorientdb;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,3 +16,4 @@ public class SpringOrientDBApplicationTests {
 	}
 
 }
+*/

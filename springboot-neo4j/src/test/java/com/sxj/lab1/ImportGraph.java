@@ -1,4 +1,4 @@
-package com.sxj.lab1;
+/*package com.sxj.lab1;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -117,3 +117,4 @@ public class ImportGraph {
 		return sqlStr;
 	}
 }
+*/

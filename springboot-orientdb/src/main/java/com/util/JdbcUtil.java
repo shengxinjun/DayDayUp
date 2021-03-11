@@ -17,8 +17,8 @@ public class JdbcUtil {
 		Class.forName(OrientJdbcDriver.class.getName());
 		Properties info = new Properties(); 
 	      info.put("user", "root"); 
-	      info.put("password", "root"); 
-		return DriverManager.getConnection("jdbc:orient:remote:47.111.164.210/sheng",info);
+	      info.put("password", "123456"); 
+		return DriverManager.getConnection("jdbc:orient:remote:121.196.54.227/sheng",info);
 	}
 	public static void close(ResultSet rs,Statement stat,Connection conn){
 		

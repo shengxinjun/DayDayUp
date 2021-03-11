@@ -1,4 +1,4 @@
-package com.sxj.service;
+/*package com.sxj.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,3 +31,4 @@ public class RelationServiceTest {
 	}
 	
 }
+*/

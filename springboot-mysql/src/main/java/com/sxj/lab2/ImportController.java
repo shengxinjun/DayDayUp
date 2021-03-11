@@ -8,23 +8,30 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.util.StringUtils;
+
+import com.sxj.util.DateUtil;
+
 
 
 public class ImportController {
 	// MySQL 8.0 以下版本 - JDBC 驱动名及数据库 URL
      final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-     final String DB_URL = "jdbc:mysql://shengxinjun.top:3306/hhu";
+     final String DB_URL = "jdbc:mysql://121.196.54.227:3306/hhu?characterEncoding=utf-8";
  
     // 数据库的用户名与密码，需要根据自己的设置
-     final String USER = "sxj";
-     final String PASS = "sxj";
+     final String USER = "spp";
+     final String PASS = "`Ho,.hai2020Sci";
  
     public  void doImport() throws FileNotFoundException {
     	BufferedReader reader = new BufferedReader(
-				new FileReader("/opt/lab2/US_Accidents_June20.csv"));// 换成你的文件名
-		
+				new FileReader("/usr/local/sxj/US_Accidents_June20.csv"));// 换成你的文件名
+
+		String startTimeString="";
+		String endTimeString="";
         Connection conn = null;
         Statement stmt = null;
         try{
@@ -42,27 +49,52 @@ public class ImportController {
             
             String line = null;
 			int count = 0;
-			long startTime = System.currentTimeMillis();
+			List<Accident> list = new ArrayList<Accident>();
 			while ((line = reader.readLine()) != null&&count<=1000000) {
+				count++;
 				line = filterSqlString(line);
 				String item[] = line.split(",");// CSV格式文件为逗号分隔符文件，这里根据逗号切分
-				String sql = "insert into us_accident set id ='"+item[0]+"',source='"+item[1]+"',start_time='"+item[4]+"',end_time='"+item[5]+"',start_lat='"+item[6]+"',start_lng='"+item[7]+"',street='"+item[13]+"',city='"+item[15]+"',country='"+item[16]+"',state='"+item[17]+"',airport_code='"+item[21]+"',weather='"+item[22]+"',temperature='"+item[23]+"',wind='"+item[24]+"'";
+				Accident acc = new Accident();
+				acc.setId(item[0]);
+				acc.setSource(item[1]);
+				acc.setStart_time(item[4]);
+				acc.setEnd_time(item[5]);
+				acc.setStart_lat(item[6]);
+				acc.setStart_lng(item[7]);
+				acc.setStreet(item[13]);
+				acc.setCity(item[15]);
+				acc.setCountry(item[16]);
+				acc.setState(item[17]);
+				acc.setAirport_code(item[21]);
+				acc.setWeather(item[22]);
+				acc.setTemperature(item[23]);
+				acc.setWind(item[24]);
+				list.add(acc);
+			}
+			count=0;
+			startTimeString=DateUtil.currentDateTime();
+			long startTime = System.currentTimeMillis();
+			for(Accident acc:list) {
+				String sql = "insert into us_accident set id ='"+acc.getId()+"',source='"+acc.getSource()+"',start_time='"+acc.getStart_time()+"',end_time='"+acc.getEnd_time()+"',start_lat='"+acc.getStart_lat()+"',start_lng='"+acc.getStart_lng()+"',street='"+acc.getStreet()+"',city='"+acc.getCity()+"',country='"+acc.getCountry()+"',state='"+acc.getState()+"',airport_code='"+acc.getAirport_code()+"',weather='"+acc.getWeather()+"',temperature='"+acc.getTemperature()+"',wind='"+acc.getWind()+"'";
 
 				stmt.execute(sql);
+				if (++count % 10000 == 0)
+					System.out.println("正在插入第" + count + "条数据！");
+				
 				if(count==500000){
 					long endTime = System.currentTimeMillis();
 					String sql1="insert into logger set message='插入500000条数据用时：" + (endTime - startTime)+" ms'";
-		            stmt.execute(sql1);
+					stmt.execute(sql1);
 					
 				}
-				if (++count % 10000 == 0)
-					System.out.println("正在插入第" + count + "条数据！");
 				
 			}
 			
 
+			endTimeString=DateUtil.currentDateTime();
 			long endTime = System.currentTimeMillis();
-			String sql1="insert into logger set message='插入1000000条数据用时：" + (endTime - startTime)+" ms'";
+			String sql1="insert into logger set message='插入1000000条数据用时：" + (endTime - startTime)+" ms,开始时间："+startTimeString+",结束时间："+endTimeString+"'";
+			
             stmt.execute(sql1);
             rs.close();
             stmt.close();

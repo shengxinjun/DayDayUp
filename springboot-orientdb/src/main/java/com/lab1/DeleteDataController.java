@@ -12,10 +12,7 @@ import com.util.JdbcUtil;
 
 public class DeleteDataController {
 	
-	public static void main(String[] args) {
-		deleteGraph();
-	}
-	static void deleteGraph(){
+	 void deleteGraph(){
 
 		Connection conn = null;
 		Statement stat = null;
@@ -56,7 +53,7 @@ public class DeleteDataController {
 	
 	
 	}
-	static void deleteDocument(){
+	 void deleteDocument(){
 		
 
 

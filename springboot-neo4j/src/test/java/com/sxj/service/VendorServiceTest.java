@@ -1,4 +1,4 @@
-package com.sxj.service;
+/*package com.sxj.service;
 
 import java.util.List;
 
@@ -46,3 +46,4 @@ public class VendorServiceTest {
 		vendorService.deleteVendor("Nike");
 	}
 }
+*/

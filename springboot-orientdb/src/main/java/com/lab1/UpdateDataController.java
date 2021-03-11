@@ -10,10 +10,8 @@ import com.util.JdbcUtil;
 
 public class UpdateDataController {
 	
-	public static void main(String[] args) {
-		updateGraph();
-	}
-	static void updateGraph(){
+	
+	 void updateGraph(){
 
 		Connection conn = null;
 		Statement stat = null;
@@ -42,7 +40,7 @@ public class UpdateDataController {
 		}
 	}
 	
-	static void updateDocument(){
+	 void updateDocument(){
 
 		Connection conn = null;
 		Statement stat = null;

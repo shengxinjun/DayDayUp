@@ -9,17 +9,11 @@ import java.sql.Statement;
 import org.springframework.util.StringUtils;
 
 import com.util.JdbcUtil;
-import com.util.Result;
 
 public class ImportDataController {
 
-	public static void main(String[] args) {
 
-		importGraph();
-
-	}
-
-	static void importGraph() {
+	 void importGraph() {
 
 		Connection conn = null;
 		Statement stat = null;
@@ -71,7 +65,7 @@ public class ImportDataController {
 		}
 	}
 
-	static void importDocument() {
+	 void importDocument() {
 
 		Connection conn = null;
 		Statement stat = null;

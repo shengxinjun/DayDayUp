@@ -8,7 +8,7 @@ public class Tasks {
 
 	
 	
-	@Scheduled(cron="0 33 12 * * ?  ")
+	@Scheduled(cron="0 08 12 * * ?  ")
 	void startInterface(){
 		ImportDataController im = new ImportDataController();
 		try {

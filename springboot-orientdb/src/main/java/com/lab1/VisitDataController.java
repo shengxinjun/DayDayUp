@@ -12,11 +12,8 @@ import com.util.JdbcUtil;
 
 public class VisitDataController {
 
-	public static void main(String[] args) {
-		visitGraph();
-	}
 	
-	static void visitGraph(){
+	 void visitGraph(){
 
 
 		Connection conn = null;
@@ -49,7 +46,7 @@ public class VisitDataController {
 	
 	}
 
-	static void visitDocument() {
+	 void visitDocument() {
 
 		Connection conn = null;
 		Statement stat = null;

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: multi-model_database
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: shengxinjun
+Implementation-Vendor-Id: com.sxj
+Build-Jdk: 1.8.0_91
+Implementation-URL: http://projects.spring.io/spring-boot/multi-model_
+ database/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+
